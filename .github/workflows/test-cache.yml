@@ -33,4 +33,5 @@ jobs:
         if: steps.cache-osm-file.outputs.cache-hit != 'true'
         run: |
           mkdir ~/.osm_source
-          curl -sfo ~/.osm_source/osm.pbf ${{ github.events.inputs.osm_url }}
+          echo ${{ github.events.inputs.osm_url }}
+          curl -sfo "~/.osm_source/osm.pbf" ${{ github.events.inputs.osm_url }}
