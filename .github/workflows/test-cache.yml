@@ -1,0 +1,36 @@
+name: "Download OSM File"
+
+on:
+  workflow_dispatch:
+    inputs:
+      osm_url:
+        description: "URL zu einer OSM PBF Datei, z. B. http://download.geofabrik.de/europe/germany/nordrhein-westfalen-latest.osm.pbf"
+        required: true
+        default: "http://download.geofabrik.de/europe/andorra-latest.osm.pbf"
+
+jobs:
+  download:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Obtain Checksum
+        id: obtain_checksum
+        run: |
+          CHECKSUM_URL=${{ github.events.inputs.osm_url }}.md5
+          if [[ $(curl -fs $CHECKSUM_URL) ]]; then
+            echo "checksum=$(curl -s $CHECKSUM_URL | awk '{print $1"-"$2}')" >> $GITHUB_OUTPUT
+          fi
+
+      - uses: actions/cache@v3
+        name: Cache OSM File
+        id: cache-osm-file
+        with:
+          path: ~/.osm_source
+          key: osm-checksum-${{ steps.obtain_checksum.outputs.checksum }}
+
+      - name: Download OSM File
+        if: steps.cache-osm-file.outputs.cache-hit != 'true'
+        run: |
+          mkdir ~/.osm_source
+          curl -sfo ~/.osm_source/osm.pbf ${{ github.events.inputs.osm_url }}
