@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
     inputs:
       osm_url:
-        description: "URL zu einer OSM PBF Datei, z. B. http://download.geofabrik.de/europe/germany/nordrhein-westfalen-latest.osm.pbf"
         required: false
         default: "http://download.geofabrik.de/europe/andorra-latest.osm.pbf"
 
