@@ -17,7 +17,7 @@ jobs:
       - name: Obtain Checksum
         id: obtain_checksum
         run: |
-          CHECKSUM_URL=${{ github.events.inputs.osm_url }}.md5
+          CHECKSUM_URL=${{ inputs.osm_url }}.md5
           if [[ $(curl -fs $CHECKSUM_URL) ]]; then
             echo "checksum=$(curl -s $CHECKSUM_URL | awk '{print $1"-"$2}')" >> $GITHUB_OUTPUT
           fi
@@ -33,5 +33,5 @@ jobs:
         if: steps.cache-osm-file.outputs.cache-hit != 'true'
         run: |
           mkdir ~/.osm_source
-          echo ${{ github.events.inputs.osm_url }}
-          curl -sfo "~/.osm_source/osm.pbf" ${{ github.events.inputs.osm_url }}
+          echo ${{ inputs.osm_url }}
+          curl -sfo "~/.osm_source/osm.pbf" ${{ inputs.osm_url }}
