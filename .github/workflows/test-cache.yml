@@ -34,4 +34,4 @@ jobs:
         run: |
           mkdir ~/.osm_source
           echo ${{ inputs.osm_url }}
-          curl -sfo "~/.osm_source/osm.pbf" ${{ inputs.osm_url }}
+          curl -sfo ~/.osm_source/osm.pbf ${{ inputs.osm_url }}
